@@ -2,32 +2,32 @@ package com.pluralsight;
 
 public class Products {
 
-    private String productNane;
-    private int productSKU;
+    private String productName;
+    private String productSku;
     private double productPrice;
     private String productDepartment;
 
-    public Products(String productNane, int productSKU, double productPrice, String productDepartment) {
-        this.productNane = productNane;
-        this.productSKU = productSKU;
+    public Products(String productName, String productSku, double productPrice, String productDepartment) {
+        this.productName = productName;
+        this.productSku = productSku;
         this.productPrice = productPrice;
         this.productDepartment = productDepartment;
     }
 
-    public String getProductNane() {
-        return productNane;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductNane(String productNane) {
-        this.productNane = productNane;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public int getProductSKU() {
-        return productSKU;
+    public String getProductSku() {
+        return productSku;
     }
 
-    public void setProductSKU(int productSKU) {
-        this.productSKU = productSKU;
+    public void setProductSku(String productSku) {
+        this.productSku = productSku;
     }
 
     public double getProductPrice() {
