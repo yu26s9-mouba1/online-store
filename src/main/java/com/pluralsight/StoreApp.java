@@ -1,13 +1,13 @@
 package com.pluralsight;
-import java.io.Console;
+
 import java.io.IOException;
-import java.util.HashMap;
+
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Collection;
-//java.util.Map;
+
+
 
 
 
@@ -242,6 +242,31 @@ public class StoreApp {
 
 
     public static void processDisplayCart(ArrayList<Products> cart) {
+                Scanner scanner = new Scanner(System.in);
+        System.out.println("""
+        
+            What do you want to do?
+            1-checkout
+            2-Remove Product
+            3-Go back
+            """ );
+
+        int option = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (option) {
+            case 1:
+                processCheckout(cart, scanner);
+                break;
+            case 2:
+                processRemoveProductFromCart(cart, scanner);
+                break;
+            case 3:
+                System.out.println("Return to the main menu");
+                break;
+        }
+
+
 
         if (cart.isEmpty()){
             System.out.println("Your shopping car is empty, please add products to the cart");
@@ -266,7 +291,7 @@ public class StoreApp {
 
     public static void processRemoveProductFromCart(ArrayList<Products> cart, Scanner scanner){
 
-        System.out.println("Please enter product sku");
+//        System.out.println("Please enter product sku");
 
 //        cart.remove();
 
@@ -296,11 +321,6 @@ public class StoreApp {
         }
 
 
-
-
-
-
-
     }
 
 
@@ -308,7 +328,41 @@ public class StoreApp {
 
 
 
-    public static void processCheckout(ArrayList<Products> cart, Scanner){
+    public static void processCheckout(ArrayList<Products> cart, Scanner scanner){
+
+        if (cart.isEmpty()){
+            System.out.println("Your cart is empty");
+            return;
+        }
+
+        double total = 0;
+
+        System.out.println("========== Check ===========");
+        for(Products p : cart) {
+            System.out.printf("%s | %s | $%.2f | %s%n" ,
+                    p.getProductSku(),
+                    p.getProductName(),
+                    p.getProductPrice(),
+                    p.getProductDepartment());
+
+            total += p.getProductPrice();
+        }
+
+        System.out.printf("Total: $%.2f%n", total);
+        System.out.println("Do you want to proceed to checkout? yes/no: ");
+        String process = scanner.nextLine();
+
+        if (process.equalsIgnoreCase("yes")){
+            cart.clear();
+            System.out.println("Checkout successfully complete. Thank you!");
+
+        }else {
+            System.out.println("Checkout cancelled");
+        }
+
+
+
+
 
     }
 
