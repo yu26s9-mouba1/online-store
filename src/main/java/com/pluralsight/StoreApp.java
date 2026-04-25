@@ -1,10 +1,14 @@
 package com.pluralsight;
+import java.io.Console;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collection;
+//java.util.Map;
+
 
 
 
@@ -12,13 +16,16 @@ import java.util.ArrayList;
 public class StoreApp {
 
     private static final String PRODUCT_FILE = "data/products.csv";
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("==========Welcome To ZAM-ZAM Store===========");
+
+        System.out.println("========== Welcome To ZAM-ZAM Store ===========");
 
         //Getting Inventory
         ArrayList<Products> inventory = loadInventory();
+        ArrayList<Products> cart = new ArrayList<>();
 
 
         //Displaying products from inventory
@@ -31,6 +38,7 @@ public class StoreApp {
                      3- Exit
                      Enter command: """;
 
+
             System.out.println(mainMenuPrompt);
             userOption = scanner.nextInt();
             scanner.nextLine();
@@ -40,11 +48,11 @@ public class StoreApp {
 
             switch (userOption) {
                 case 1:
-                    processDisplayAllProducts(inventory);
+                    processDisplayAllProducts(inventory, cart, scanner);
                     break;
 
                 case 2:
-                    processDisplayCart();
+                    processDisplayCart(cart);
                     break;
 
                 case 3:
@@ -62,19 +70,17 @@ public class StoreApp {
         } while (userOption != 3);
 
 
-
     }
 
 
-//Load products from CSV
+//Load Inventory
 
-    public static ArrayList<Products> loadInventory(){
+    public static ArrayList<Products> loadInventory() {
         ArrayList<Products> products = new ArrayList<>();
 
         try {
 
-            //File And Buffered Readers
-//            FileReader fr = new FileReader("data/inventory.csv");
+            //Buffered Reader
             BufferedReader br = new BufferedReader(new FileReader(PRODUCT_FILE));
 
             br.readLine();
@@ -82,6 +88,7 @@ public class StoreApp {
             String line;
 
             while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
                 Products p = getProducts(line);
                 products.add(p);
 
@@ -103,6 +110,7 @@ public class StoreApp {
 
         String[] parts = line.split("\\|");
 
+
         String sku = parts[0];
         String name = parts[1];
         double price = Double.parseDouble(parts[2]);
@@ -112,23 +120,82 @@ public class StoreApp {
     }
 
 
+//Display products
 
-//DIsplay products
-    public static void processDisplayAllProducts(ArrayList<Products> inventory) {
+
+    public static void processDisplayAllProducts(ArrayList<Products> inventory, ArrayList<Products> cart, Scanner scanner) {
+
+        System.out.println("========= Available Products =========");
 
         for (int i = 0; i < inventory.size(); i++) {
 
             Products p = inventory.get(i);
+
 
             System.out.printf("%s | %s | $%.2f | %s%n",
                     p.getProductSku(),
                     p.getProductName(),
                     p.getProductPrice(),
                     p.getProductDepartment());
+
+
         }
+
+        int option;
+
+        do {
+
+            String cartMenuPrompt = """
+                    What Do You Want To Do Next?
+                    1- Search or filter the list of products
+                    2- Add a product to cart
+                    3- Go back to home page
+                    Enter Command: """;
+
+            System.out.println(cartMenuPrompt);
+            option = scanner.nextInt();
+            scanner.nextLine();
+
+
+            switch (option) {
+
+                case 1:
+                    processSearchProducts(inventory, scanner);
+                    break;
+
+                case 2:
+                    processAddProductToCart(inventory, cart, scanner);
+                    break;
+
+                case 3:
+                    System.out.println("Return to the main menu");
+                    break;
+
+                default:
+                    System.out.println("Invalid Entry, try again");
+
+            }
+
+
+        } while (option != 3);
+
+
     }
 
-    public static void processDisplayCart(){
+
+    public static void processSearchProducts(ArrayList<Products> inventory, Scanner scanner) {
+
+        System.out.println("Please, enter product name or department ");
+        String userChoice = scanner.nextLine();
+
+
+
+
+
+
+
+
+
 
 
 
@@ -136,11 +203,33 @@ public class StoreApp {
     }
 
 
+    public static void processDisplayCart(ArrayList<Products> cart) {
 
 
+     }
+
+
+
+     public static void processAddProductToCart(ArrayList<Products> inventory, ArrayList<Products> cart, Scanner scanner){
+
+     }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
