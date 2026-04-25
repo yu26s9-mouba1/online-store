@@ -23,7 +23,7 @@ public class StoreApp {
 
         System.out.println("========== Welcome To ZAM-ZAM Store ===========");
 
-        //Getting Inventory
+        //Inventory
         ArrayList<Products> inventory = loadInventory();
         ArrayList<Products> cart = new ArrayList<>();
 
@@ -88,7 +88,7 @@ public class StoreApp {
             String line;
 
             while ((line = br.readLine()) != null) {
-                if (line.trim().isEmpty()) continue;
+                if (line.trim().isEmpty()) continue; //Skipping empty spaces
                 Products p = getProducts(line);
                 products.add(p);
 
@@ -186,18 +186,29 @@ public class StoreApp {
     public static void processSearchProducts(ArrayList<Products> inventory, Scanner scanner) {
 
         System.out.println("Please, enter product name or department ");
-        String userChoice = scanner.nextLine();
+        String userChoice = scanner.nextLine().toLowerCase();
+
+        boolean found = false;
+
+        for ( Products p : inventory) {
+
+            if (p.getProductName().toLowerCase().contains(userChoice) || p.getProductDepartment().toLowerCase().contains(userChoice)){
+                System.out.printf("%s | %s | $%.2f | %s%n",
+                p.getProductSku(),
+                p.getProductName(),
+                p.getProductPrice(),
+                p.getProductDepartment());
+
+                found = true;
+
+            }
+        }
+
+        if (!found){
+            System.out.println("Sorry, product unavailable");
 
 
-
-
-
-
-
-
-
-
-
+        }
 
 
     }
@@ -205,12 +216,47 @@ public class StoreApp {
 
     public static void processDisplayCart(ArrayList<Products> cart) {
 
+        if (cart.isEmpty()){
+            System.out.println("Your shopping car is empty, please add products to the cart");
+            return;
+        }
+
+        double total = 0;
+        System.out.println("========== Your Cart ===========");
+        for (Products p : cart){
+            System.out.printf("%s | %s | $%.2f | %s%n",
+                    p.getProductSku(),
+                    p.getProductName(),
+                    p.getProductPrice(),
+                    p.getProductDepartment());
+            total += p.getProductPrice();
+
+        }
+
+        System.out.printf("Total: $%.2f%n", total);
+
+
+
 
      }
 
 
 
      public static void processAddProductToCart(ArrayList<Products> inventory, ArrayList<Products> cart, Scanner scanner){
+        String sku = scanner.nextLine();
+
+        for (Products p: inventory){
+            if (p.getProductSku().equalsIgnoreCase(sku)){
+                cart.add(p);
+                System.out.println(p.getProductName() + " added to cart.");
+                return;
+            }else {
+                System.out.println("Product not found.");
+            }
+
+        }
+
+
 
      }
 

@@ -47,3 +47,8 @@ public class Products {
     }
 }
 
+public void checkOut(double Price){
+    this.CheckOut = true;
+    
+
+}
