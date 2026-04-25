@@ -214,6 +214,33 @@ public class StoreApp {
     }
 
 
+
+    public static void processAddProductToCart(ArrayList<Products> inventory, ArrayList<Products> cart, Scanner scanner){
+
+        System.out.println("Please enter the product sku");
+        String sku = scanner.nextLine();
+
+        boolean found = false;
+
+        for (Products p: inventory){
+            if (p.getProductSku().equalsIgnoreCase(sku)){
+                cart.add(p);
+
+                System.out.println(p.getProductName() + " successfully added to cart.");
+
+                found =true;
+                return;
+            }
+
+        }
+
+         if (!found) {
+             System.out.println("Product not found.");
+         }
+
+    }
+
+
     public static void processDisplayCart(ArrayList<Products> cart) {
 
         if (cart.isEmpty()){
@@ -232,33 +259,64 @@ public class StoreApp {
             total += p.getProductPrice();
 
         }
-
         System.out.printf("Total: $%.2f%n", total);
 
+    }
 
 
+    public static void processRemoveProductFromCart(ArrayList<Products> cart, Scanner scanner){
 
-     }
+        System.out.println("Please enter product sku");
 
+//        cart.remove();
 
+        if (cart.isEmpty()){
+            System.out.println("Your cart is empty.");
+            return;
+        }
 
-     public static void processAddProductToCart(ArrayList<Products> inventory, ArrayList<Products> cart, Scanner scanner){
-        String sku = scanner.nextLine();
+        System.out.println("Please enter product sku");
+        String sku = scanner.nextLine().trim();
 
-        for (Products p: inventory){
+        boolean found = false;
+
+        for (int i = 0; i < cart.size(); i++) {
+            Products p = cart.get(i);
+
             if (p.getProductSku().equalsIgnoreCase(sku)){
-                cart.add(p);
-                System.out.println(p.getProductName() + " added to cart.");
-                return;
-            }else {
-                System.out.println("Product not found.");
+                cart.remove(i);
+                System.out.println(p.getProductName() + " removed from cart");
+                found = true;
+                break;
             }
+        }
 
+        if(!found){
+            System.out.println("product not found in cart");
         }
 
 
 
-     }
+
+
+
+
+    }
+
+
+
+
+
+
+    public static void processCheckout(ArrayList<Products> cart, Scanner){
+
+    }
+
+
+
+
+
+
 
 
 }
