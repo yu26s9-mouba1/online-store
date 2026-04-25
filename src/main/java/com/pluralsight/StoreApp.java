@@ -1,7 +1,5 @@
 package com.pluralsight;
-
 import java.io.IOException;
-
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -23,12 +21,12 @@ public class StoreApp {
 
         System.out.println("========== Welcome To ZAM-ZAM Store ===========");
 
-        //Inventory
+        //Loading Inventory
         ArrayList<Products> inventory = loadInventory();
         ArrayList<Products> cart = new ArrayList<>();
 
 
-        //Displaying products from inventory
+        //Home Menu Screen
         int userOption;
         do {
             String mainMenuPrompt = """
@@ -44,19 +42,19 @@ public class StoreApp {
             scanner.nextLine();
 
 
-            // Store Home Screen
+            // Display products and cart methods. I will call each of the methods based on the user option
 
             switch (userOption) {
                 case 1:
-                    processDisplayAllProducts(inventory, cart, scanner);
+                    displayAllProducts(inventory, cart, scanner);
                     break;
 
                 case 2:
-                    processDisplayCart(cart);
+                    displayCart(cart);
                     break;
 
                 case 3:
-                    System.out.println(" Thank you for using ZAM-ZAM store");
+                    System.out.println(" Thank you for using ZAM-ZAM store"); //Exitting the application
 
                     break;
 
@@ -67,28 +65,27 @@ public class StoreApp {
             }
 
 
-        } while (userOption != 3);
+        } while (userOption != 3);//Application stops when user chooses option 3
 
 
     }
 
 
-//Load Inventory
+// Load Inventory method implementing exception handlers
 
     public static ArrayList<Products> loadInventory() {
         ArrayList<Products> products = new ArrayList<>();
 
         try {
 
-            //Buffered Reader
             BufferedReader br = new BufferedReader(new FileReader(PRODUCT_FILE));
 
             br.readLine();
-
             String line;
 
+            //Reading and converting products objects
             while ((line = br.readLine()) != null) {
-                if (line.trim().isEmpty()) continue; //Skipping empty spaces
+                if (line.trim().isEmpty()) continue; //Skipping empty lines
                 Products p = getProducts(line);
                 products.add(p);
 
@@ -106,10 +103,11 @@ public class StoreApp {
 
     }
 
+
+        //
     public static Products getProducts(String line) {
 
         String[] parts = line.split("\\|");
-
 
         String sku = parts[0];
         String name = parts[1];
@@ -120,10 +118,9 @@ public class StoreApp {
     }
 
 
-//Display products
+//Displaying all products available in the inventory
 
-
-    public static void processDisplayAllProducts(ArrayList<Products> inventory, ArrayList<Products> cart, Scanner scanner) {
+    public static void displayAllProducts(ArrayList<Products> inventory, ArrayList<Products> cart, Scanner scanner) {
 
         System.out.println("========= Available Products =========");
 
@@ -160,11 +157,11 @@ public class StoreApp {
             switch (option) {
 
                 case 1:
-                    processSearchProducts(inventory, scanner);
+                        searchProducts(inventory, scanner);
                     break;
 
                 case 2:
-                    processAddProductToCart(inventory, cart, scanner);
+                        addProductToCart(inventory, cart, scanner);
                     break;
 
                 case 3:
@@ -182,8 +179,8 @@ public class StoreApp {
 
     }
 
-
-    public static void processSearchProducts(ArrayList<Products> inventory, Scanner scanner) {
+    //This method allows custumers to search for any peoduct of their choice
+    public static void searchProducts(ArrayList<Products> inventory, Scanner scanner) {
 
         System.out.println("Please, enter product name or department ");
         String userChoice = scanner.nextLine().toLowerCase();
@@ -214,8 +211,8 @@ public class StoreApp {
     }
 
 
-
-    public static void processAddProductToCart(ArrayList<Products> inventory, ArrayList<Products> cart, Scanner scanner){
+    //THis method allows users to add products to their shopping cart
+    public static void addProductToCart(ArrayList<Products> inventory, ArrayList<Products> cart, Scanner scanner){
 
         System.out.println("Please enter the product sku");
         String sku = scanner.nextLine();
@@ -240,39 +237,41 @@ public class StoreApp {
 
     }
 
+   //Displaying products added in the cart
+    public static void displayCart(ArrayList<Products> cart) {
+            Scanner scanner = new Scanner(System.in);
 
-    public static void processDisplayCart(ArrayList<Products> cart) {
-                Scanner scanner = new Scanner(System.in);
-        System.out.println("""
-        
-            What do you want to do?
-            1-checkout
-            2-Remove Product
-            3-Go back
-            """ );
+            System.out.println("""
+                   
+                   What do you want to do?
+                   1-checkout
+                   2-Remove Product
+                   3-Go back
+                   """);
 
         int option = scanner.nextInt();
         scanner.nextLine();
 
-        switch (option) {
-            case 1:
-                processCheckout(cart, scanner);
-                break;
-            case 2:
-                processRemoveProductFromCart(cart, scanner);
-                break;
-            case 3:
-                System.out.println("Return to the main menu");
-                break;
-        }
+           switch (option) {
+               case 1:
+                   checkout(cart, scanner);
+                   break;
+               case 2:
+                   removeProductFromCart(cart, scanner);
+                   break;
+               case 3:
+                   System.out.println("Return to the main menu");
+                   break;
 
+           }
 
-
-        if (cart.isEmpty()){
+           if (cart.isEmpty()){
             System.out.println("Your shopping car is empty, please add products to the cart");
             return;
-        }
+           }
 
+
+        //Displaying the total price of products in the cart
         double total = 0;
         System.out.println("========== Your Cart ===========");
         for (Products p : cart){
@@ -289,7 +288,7 @@ public class StoreApp {
     }
 
 
-    public static void processRemoveProductFromCart(ArrayList<Products> cart, Scanner scanner){
+    public static void removeProductFromCart(ArrayList<Products> cart, Scanner scanner){
 
 //        System.out.println("Please enter product sku");
 
@@ -310,15 +309,34 @@ public class StoreApp {
 
             if (p.getProductSku().equalsIgnoreCase(sku)){
                 cart.remove(i);
-                System.out.println(p.getProductName() + " removed from cart");
-                found = true;
-                break;
+
+
+                System.out.println("Do you want to remove items? Yes/no");
+                String option = scanner.nextLine();
+
+                if (option.equalsIgnoreCase("yes")){
+
+                    System.out.println(p.getProductName() + " removed from cart");
+                    found = true;
+                    break;
+
+                } else if (!found){
+                    System.out.println("product not found");
+
+                }
+
+
+
+
+//                System.out.println(p.getProductName() + " removed from cart");
+//                found = true;
+//                break;
             }
         }
 
-        if(!found){
-            System.out.println("product not found in cart");
-        }
+//        if(!found){
+//            System.out.println("product not found");
+//        }
 
 
     }
@@ -327,8 +345,8 @@ public class StoreApp {
 
 
 
-
-    public static void processCheckout(ArrayList<Products> cart, Scanner scanner){
+  //Checking out
+    public static void checkout(ArrayList<Products> cart, Scanner scanner){
 
         if (cart.isEmpty()){
             System.out.println("Your cart is empty");
@@ -337,7 +355,7 @@ public class StoreApp {
 
         double total = 0;
 
-        System.out.println("========== Check ===========");
+        System.out.println("========== Checkout ===========");
         for(Products p : cart) {
             System.out.printf("%s | %s | $%.2f | %s%n" ,
                     p.getProductSku(),

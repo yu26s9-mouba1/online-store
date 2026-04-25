@@ -48,7 +48,7 @@ public class Products {
 }
 
 //public void checkOut(double Price){
-//    this.CheckOut = true;
+//    this.CheckOut = false;
 //    this.subTotal =
 //
 //
